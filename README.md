@@ -4,8 +4,10 @@ Remove.  Update Insert. QueryAll. QueryAll. QueryByKey.
 
 函数  改成 通用的 函数  可以多结构体 多表 都支持  
   
+  刚学go     还搞不懂    结构体 如何 弄到  函数    跟 函数返回特定结构体
 
 
+以下是  数据库
 <pre>
 
  
