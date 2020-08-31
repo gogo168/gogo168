@@ -1,18 +1,30 @@
- 
-CREATE TABLE `test_table` (
-  `field_key` varchar(64) NOT NULL DEFAULT '',
-  `field_one` varchar(64) DEFAULT NULL,
-  `field_two` tinyint(1) DEFAULT NULL,
-  `field_thr` int(12) DEFAULT NULL,
-  `field_fou` float DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
- 
+<?php
 
-INSERT INTO `test_table` (`field_key`, `field_one`, `field_two`, `field_thr`, `field_fou`) VALUES
-('key001', 'one123', 1, 123455, 123.45),
-('key002', 'one456', 0, 5678, 0.01),
-('key003', 'one789', 1, 5678, 0.02);
+include __DIR__.'/MysqlStructSync.php'; 
+
  
-ALTER TABLE `test_table`
-  ADD PRIMARY KEY (`field_key`) USING BTREE;
-COMMIT;
+$local_database_config=['host'=>'127.0.0.1','username'=>'root','passwd'=>'root','dbname'=>'test','port'=>3306];
+
+$develop_database_config=['host'=>'127.0.0.1','username'=>'root','passwd'=>'root','dbname'=>'sakila','port'=>3306];
+
+//把local数据库结构更新为develop数据库结构
+$compare=new \linge\MysqlStructSync($local_database_config,$develop_database_config);
+
+$compare->removeAutoIncrement();
+
+$compare->baseDiff(); //TABLE COLUMNS(ADD,DROP,MODIFY) CONSTRAINTS(PK,FK,index, ... etc)
+
+$compare->advanceDiff(); //VIEW TRIGGER EVENT FUNCTION PROCEDURE (ADD,DROP)
+
+$diff_sql=$compare->getDiffSql();
+//print_r($diff_sql);
+
+/*******************************************/
+//用法一:自动执行全部差异语句,更新结构
+//$execute_sql_stat=$compare->execute();
+//print_r($execute_sql_stat);
+
+
+//用法二:手动选择要执行的差异语句,记住:选择储存过程，函数等请确保数据库表已经同步
+$compare->manuallySelectUpdates();
+?>
