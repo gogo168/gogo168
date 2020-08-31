@@ -1,3 +1,11 @@
+main.go
+
+Remove.  Update Insert. QueryAll. QueryAll. QueryByKey.  
+
+函数  改成 通用的 函数  可以多结构体 多表 都支持  
+  
+
+
 <pre>
 
  
